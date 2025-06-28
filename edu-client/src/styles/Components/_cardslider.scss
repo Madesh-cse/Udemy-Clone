@@ -1,0 +1,91 @@
+.card-slider-wrapper {
+  width: 90%;
+  height: auto;
+  margin: 50px auto;
+  padding: 20px;
+  overflow: visible;
+  .card-slider-wrapper-title{
+    font-size: 1.5rem;
+  }
+
+  .mySwiper {
+    position: relative;
+    padding-bottom: 50px; // give space for the pagination bullets
+
+    .swiper-pagination {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+    .swiper-button-next,
+    .swiper-button-prev {
+    color: #6d28d2;
+    top: 40%; // center vertically
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .swiper-pagination {
+    bottom: 0;
+  }
+  }
+
+  .course-card {
+    width: 270px;
+    height: 320px;
+    // border: 1px solid #c0c0c0;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+    .course-description {
+      padding: 0 15px;
+      h3 {
+        font-size: 16px;
+        font-family: sans-serif;
+        line-height: 20px;
+        margin-top:5px;
+      }
+      p{
+        margin-top: -8px;
+      }
+      h4 {
+        font-weight: 800;
+        font-family: sans-serif;
+        margin-top: -8px;
+        font-size: 13px;
+      }
+      .Premium {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #6d28d2;
+        background-color: #6d28d2;
+        color: #fff;
+        padding: 5px 15px;
+        font-size: 12px;
+        border-radius: 5px;
+        font-weight: 600;
+        margin-top: -20px;
+
+        span {
+          display: flex;
+          align-items: center;
+          margin-top: 0;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
