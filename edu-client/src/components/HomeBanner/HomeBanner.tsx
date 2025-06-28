@@ -57,6 +57,7 @@ function HomeBanner() {
             ))}
           </div>
         </div>
+        <p className="All-carrer"><NavLink to='/'>All Carrer Acclerators</NavLink></p>
       </div>
     </section>
   );
