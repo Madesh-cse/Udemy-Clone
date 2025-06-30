@@ -1,0 +1,210 @@
+.subscription-container {
+  width: 90%;
+  height: auto;
+  margin: 50px auto;
+  padding: 5px 20px;
+
+  .subscription-title {
+    h1 {
+      font-size: 2.2rem;
+    }
+    p {
+      font-family: sans-serif;
+      margin-top: -15px;
+      color: #595c73;
+      max-width: 96rem;
+      font-size: 17px;
+    }
+  }
+  .subscription-plan {
+    display: flex;
+    justify-content: space-between;
+
+    .subscription-card {
+      width: 450px;
+      border: 1px solid #c0c0c0;
+      border-radius: 10px;
+      margin-right: 10px;
+      .border-color {
+        width: 100%;
+        height: 10px;
+        background-color: #6d28d2;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+      .subscription-first-content {
+        padding: 5px 20px;
+        background-color: #d1d2e027;
+        .member {
+          margin-top: -10px;
+          color: #595c73;
+        }
+        p {
+          margin-top: -5px;
+          color: #595c73;
+        }
+      }
+      .subscription-second-content {
+        padding: 5px 20px;
+        font-family: sans-serif;
+        h2 {
+          font-size: 15px;
+          font-weight: 700;
+        }
+        p {
+          margin-top: -10px;
+          color: #595c73;
+          font-size: 12px;
+        }
+        .subscription-btn {
+          p {
+            border: 1px solid #6d28d2;
+            margin-top: 20px;
+            padding: 16px 15px;
+            text-align: center;
+            font-size: 16px;
+            background-color: #6d28d2;
+            border-radius: 5px;
+            a {
+              color: #fff;
+              text-decoration: none;
+              font-weight: 600;
+            }
+
+            span {
+              color: #fff;
+              margin-top: 20px;
+            }
+          }
+        }
+      }
+      .subscription-third-content {
+        ul {
+          list-style-type: none;
+          li {
+            line-height: 30px;
+            font-family: sans-serif;
+            font-size: 14px;
+            color: #595c73;
+            span {
+              margin-right: 20px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.Business-Container {
+  width: 90%;
+  height: auto;
+  margin: 50px auto;
+  padding: 20px;
+
+  .Business-Grid {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    place-items: center;
+    .Grid1 {
+      h1 {
+        font-size: 2.3rem;
+      }
+      p {
+        font-size: 20px;
+        font-family: sans-serif;
+      }
+      .Business-btn {
+        display: inline-flex;
+        p {
+          border: 1px solid #6d28d2;
+          padding: 10px 15px;
+          font-size: 15px;
+
+          a {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    .Grid2 {
+      img {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+.Review {
+  background-color: #d1d2e027;
+  .Review-Container {
+    width: 90%;
+    height: auto;
+    margin: 50px auto;
+    padding: 20px;
+     .Review-Title{
+        h1{
+            font-size: 2.1rem;
+        }
+      }
+
+    .Review-Card-Container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 15px;
+      .Review-Card {
+        width: 400px;
+        background-color: #fff;
+        border: 1px solid #c0c0c0;
+        margin-left: 30px;
+        padding: 15px 20px;
+        border-radius: 10px;
+
+        .Review-img {
+          img {
+            width:20px;
+            object-fit: cover;
+          }
+        }
+        .Review-Content{
+            margin-top: 20px;
+            font-size: 14px;
+            font-family: sans-serif;
+            line-height: 20px;
+
+            .Review-company{
+                margin-top: 30px;
+
+                p{
+                    margin-top: 0;
+                }
+            }
+
+            a{
+                text-decoration: none;
+            }
+            .Review-member{
+                display: flex;
+                align-items: center;
+                margin-top: 25px;
+                .Review-grid-img{
+                    img{
+                        width: 40px;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        margin-right:20px ;
+                    }
+                }
+                .Review-grid-name{
+                    p{
+                        margin-top:-20px;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+      }
+    }
+  }
+}
