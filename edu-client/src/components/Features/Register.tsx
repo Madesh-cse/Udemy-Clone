@@ -1,9 +1,43 @@
+import React, { useState } from "react";
+import axios from "axios";
 import { NavLink } from "react-router-dom";
 import "../../styles/Components/_register.scss";
 import { MdOutlineMailOutline } from "react-icons/md";
 import Footer from "../Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const Navigate = useNavigate()
+  const [userData, setuserData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  console.log(userData);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/signup",
+        userData,
+      );
+      console.log(response.data);
+      setuserData({
+        name:"",
+        email:"",
+        password:""
+      })
+      Navigate('/Login')
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.error(err.response?.data); // Validation or server error
+        alert(err.response?.data.message);
+      }
+    }
+  };
+
   return (
     <>
       <section className="Register-Card">
@@ -16,28 +50,57 @@ function Register() {
           </div>
           <div className="Register-Form">
             <h1>Sign up with email</h1>
-            <form action="">
+            <form onSubmit={handleSubmit}>
               <div className="Name">
-                <input type="text" id="Name" placeholder="Full Name" />
+                <input
+                  type="text"
+                  name="name"
+                  value={userData.name}
+                  onChange={(e) =>
+                    setuserData({ ...userData, name: e.target.value })
+                  }
+                  placeholder="Full Name"
+                />
               </div>
               <div className="Email">
-                <input type="email" name="email" placeholder="Email" />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={userData.email}
+                  onChange={(e) =>
+                    setuserData({ ...userData, email: e.target.value })
+                  }
+                />
+              </div>
+              <div className="Email">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={userData.password}
+                  onChange={(e) =>
+                    setuserData({ ...userData, password: e.target.value })
+                  }
+                />
+              </div>
+              <div className="Recommendation">
+                <input type="checkbox" />
+                <NavLink to="/">
+                  {" "}
+                  Send me special Offers,personalized recommendation and <br />{" "}
+                  learning tips
+                </NavLink>
+              </div>
+              <div className="email-btn-box">
+                <button className="email-btn" type="submit">
+                  Continue with email
+                </button>
+                <span>
+                  <MdOutlineMailOutline />
+                </span>
               </div>
             </form>
-            <div className="Recommendation">
-              <input type="checkbox" />
-              <NavLink to="/">
-                {" "}
-                Send me special Offers,personalized recommendation and <br />{" "}
-                learning tips
-              </NavLink>
-            </div>
-            <div className="email-btn-box">
-              <button className="email-btn">Continue with email</button>
-              <span>
-                <MdOutlineMailOutline />
-              </span>
-            </div>
             <div className="Other-options">
               <span>Other Sign up options</span>
             </div>
@@ -72,7 +135,7 @@ function Register() {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
     </>
   );
 }
