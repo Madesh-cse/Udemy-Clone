@@ -25,9 +25,9 @@ function Navbar() {
                     </ul>
                 </div>
                 <div className='nav-btn'>
-                    <button><NavLink to='/Login'>Login in</NavLink></button>
-                    <button className='active'><NavLink to='/signup'>Sign Up</NavLink></button>
-                    <button><NavLink to='/Login'><span><BsGlobe/></span></NavLink></button>
+                    <button><NavLink to='/login' className={({ isActive }) => (isActive ? 'btn active' : 'btn')}>Login in</NavLink></button>
+                    <button ><NavLink to='/signup' className={({ isActive }) => (isActive ? 'btn active' : 'btn')}>Sign Up</NavLink></button>
+                    <button><NavLink to='/login'><span><BsGlobe/></span></NavLink></button>
                 </div>
             </div>
         </nav>
