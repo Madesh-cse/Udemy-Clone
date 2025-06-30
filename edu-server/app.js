@@ -1,0 +1,41 @@
+const express = require('express')
+const mongoose = require('mongoose')
+
+const app = express()
+const authrouter = require('./routes/auth');
+const bodyParser = require('body-parser')
+
+
+app.use(bodyParser.json())
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+
+app.use('/auth',authrouter);
+
+app.use((req, res) => {
+  res.status(404).send('Route not found: ' + req.originalUrl);
+});
+
+mongoose.connect('mongodb+srv://madesh-edu:F3Op8LcbWQz3vN48@udemy-dev-db.oq0eh7e.mongodb.net/user?retryWrites=true&w=majority&appName=udemy-dev-db',{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    writeConcern: { w: "majority" }
+}).then(result=>{
+    app.listen(8080,()=>{
+    console.log('✅ Server is running on http://localhost:8080')
+})
+})
+.catch(err=>{
+    console.log(err)
+})
+
