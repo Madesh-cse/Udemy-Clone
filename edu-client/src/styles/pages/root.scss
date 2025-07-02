@@ -36,5 +36,11 @@
 
 // LOGIN COMPONENTS
 
-@use "../Components/login"
+@use "../Components/login";
+
+// AUTH NAVBAR COMPONENT
+
+@use "../Components/Auth/navabar";
+
+@use "../Components/Auth/banner";
 

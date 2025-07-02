@@ -26,7 +26,7 @@ app.use((req, res) => {
   res.status(404).send('Route not found: ' + req.originalUrl);
 });
 
-mongoose.connect('mongodb+srv://madesh-edu:F3Op8LcbWQz3vN48@udemy-dev-db.oq0eh7e.mongodb.net/user?retryWrites=true&w=majority&appName=udemy-dev-db',{
+mongoose.connect('mongodb+srv://madesh10cse:INSr20go9yV263fu@e-learning-platform.mhnqgwz.mongodb.net/user?retryWrites=true&w=majority&appName=E-Learning-Platform',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     writeConcern: { w: "majority" }
