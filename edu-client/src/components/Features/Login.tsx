@@ -1,11 +1,12 @@
 import '../../styles/Components/_login.scss';
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import {  useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
-function Login() {
+function Login({setIsAuthenticated}: {setIsAuthenticated: (value:boolean)=>void}) {
 
     const navigate = useNavigate()
 
@@ -13,6 +14,25 @@ function Login() {
         email:'',
         password:''
     })
+
+    useEffect(()=>{
+        const verifedToken = async()=>{
+            const token = localStorage.getItem('token')
+            if(!token){
+                return 
+            }
+
+            try{
+                await axios.get('http://localhost:8080/auth/verify',{
+                    headers:{Authorization:`Bearer ${token}`}
+                })
+                navigate('/authentication-home')
+            }catch(err){
+                localStorage.removeItem('token')
+            }
+        };
+        verifedToken()
+    },[navigate])
 
     const HandleUserLogin = async(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -24,8 +44,8 @@ function Login() {
                 email:'',
                 password:''
             })
-
-            navigate('/AuthenticatedHome')
+            setIsAuthenticated(true)
+            navigate('/authenticated-home')
         }
         catch(err){
             if(axios.isAxiosError(err)){
