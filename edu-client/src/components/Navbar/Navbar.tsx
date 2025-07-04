@@ -13,7 +13,7 @@ function Navbar() {
                 <NavLink to='/'><img src="https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg" alt="Udemy-Logo" /></NavLink>
                 <div className='nav-list'>
                     <NavLink to='/explore'>Explore</NavLink>
-                    <input type="text" placeholder='Search for Anything' />
+                    <input type="text" placeholder='Search for Anything' className='user-input' />
                     <span><CiSearch/></span>
                 </div>
                 <div className='nav-list-item'>
