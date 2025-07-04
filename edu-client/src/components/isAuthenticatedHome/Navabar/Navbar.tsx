@@ -1,4 +1,4 @@
-import '../../../styles/Components/_navbar.scss'
+import '../../../styles/Components/Auth/_navabar.scss'
 import { NavLink } from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
 import { IoCartOutline } from "react-icons/io5";
@@ -34,8 +34,8 @@ function AuthNavbar({setIsAuthenticated}: {setIsAuthenticated:(value:boolean)=>v
                         <li><NavLink to=''><span><CiBellOn/></span></NavLink></li>
                     </ul>
                 </div>
-                <div>
-                    <button onClick={handleLogout}>LogOut</button>
+                <div className='logout'>
+                    <button onClick={handleLogout}>Logout</button>
                 </div>
             </div>
         </nav>
