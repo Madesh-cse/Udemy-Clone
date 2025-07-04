@@ -1,0 +1,138 @@
+section {
+  width: 100%;
+
+  .Top-Pick {
+    width: 90%;
+    margin: 50px auto;
+
+    a {
+      text-decoration: none;
+    }
+
+    .top-pick-container {
+      display: flex;
+      align-items: flex-start;
+      border: 1px solid #c0c0c0;
+      padding: 20px;
+      gap: 24px;
+      border-radius: 8px;
+      font-family: sans-serif;
+
+      .top-pick-img {
+        flex: 0 0 450px;
+
+        img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+      }
+
+      .top-pick-content {
+        flex: 1;
+        margin-top: -20px;
+
+        h1 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1c1d1f;
+          margin-bottom: 8px;
+        }
+
+        p {
+          font-size: 15px;
+          color: #000;
+          margin: 8px 0;
+
+          &.Author {
+            font-size: 12px;
+          }
+
+          &.updates {
+            font-size: 0.85rem;
+            color: #6a6f73;
+
+            span {
+              font-weight: 600;
+              color: #2d2f31;
+              margin-right: 6px;
+            }
+          }
+        }
+
+        .rating {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          margin: 10px 0;
+
+          svg {
+            font-size: 1rem;
+          }
+
+          .review-count {
+            font-size: 0.9rem;
+            color: #6a6f73;
+            margin-left: 6px;
+            font-weight: 500;
+          }
+
+          .btn {
+            display: flex;
+            align-items: center;
+            margin-left: 12px;
+            .Premium {
+              display: inline-flex;
+              align-items: center;
+              border: 1px solid #6d28d2;
+              background-color: #6d28d2;
+              color: #fff;
+              padding: 5px 15px;
+              font-size: 13px;
+              border-radius: 5px;
+              font-weight: 600;
+              font-family: sans-serif;
+
+              span {
+                display: flex;
+                align-items: center;
+                margin-top: 0;
+                margin-right: 5px;
+                color: #fff;
+              }
+            }
+            .badge {
+              display: inline-block;
+              background: linear-gradient(135deg, #d0ebff, #a5d8ff);
+              color: #003366;
+              font-size: 12px;
+              font-weight: 700;
+              padding: 4px 8px;
+              border-radius: 4px;
+              margin-left: 10px;
+              letter-spacing: 0.3px;
+              font-family: "Segoe UI", sans-serif;
+            }
+          }
+        }
+        .Price {
+          margin-top: auto; 
+          h4 {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1c1d1f;
+            font-family: "Segoe UI", sans-serif;
+
+            svg {
+              font-size: 1rem;
+              color: #1c1d1f;
+            }
+          }
+        }
+      }
+    }
+  }
+}
