@@ -65,7 +65,7 @@ exports.Login = (req,res,next)=>{
         const token = jwt.sign({
             email:loadedUser.email,
             userId : loadedUser._id.toString()
-        },'supersecretesecrete',{expiresIn:'1h'})
+        },'supersecretesecrete',{expiresIn:'8h'})
 
         res.status(200).json({token: token,userId: loadedUser._id.toString()})
     })
@@ -76,4 +76,15 @@ exports.Login = (req,res,next)=>{
         next(err)
     })
 
+}
+exports.getUserInfo = (req,res,next)=>{
+  const userId = req.userId;
+  User.findById(userId)
+  .select('name email')
+  .then(user=>{
+    if(!user){
+      return res.status(404).json({message:'User not found'})
+    }
+    res.status(200).json({name:user.name,email:user.email})
+  })
 }

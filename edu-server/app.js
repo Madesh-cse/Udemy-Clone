@@ -30,7 +30,8 @@ mongoose.connect('mongodb+srv://madesh10cse:INSr20go9yV263fu@e-learning-platform
     useNewUrlParser: true,
     useUnifiedTopology: true,
     writeConcern: { w: "majority" }
-}).then(result=>{
+})
+.then(result=>{
     app.listen(8080,()=>{
     console.log('✅ Server is running on http://localhost:8080')
 })

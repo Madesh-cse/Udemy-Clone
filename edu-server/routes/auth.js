@@ -37,4 +37,6 @@ router.get('/verify',isAuth,(req,res)=>{
     res.status(200).json({ message: 'Token is valid', userId: req.userId });
 })
 
+router.get('/user-Info',isAuth, authController.getUserInfo)
+
 module.exports = router
