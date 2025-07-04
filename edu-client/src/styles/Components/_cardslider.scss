@@ -1,91 +1,260 @@
 .card-slider-wrapper {
   width: 90%;
-  height: auto;
   margin: 50px auto;
   padding: 20px;
-  overflow: visible;
-  .card-slider-wrapper-title{
-    font-size: 1.5rem;
+  overflow: none;
+
+  .card-slider-wrapper-title {
+    h1 {
+      font-size: 1.5rem;
+      font-family: sans-serif;
+    }
   }
 
   .mySwiper {
-    position: relative;
-    padding-bottom: 50px; // give space for the pagination bullets
+    overflow: none;
 
-    .swiper-pagination {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      text-align: center;
+    .swiper-wrapper {
+      overflow: visible;
     }
+
+    .swiper-slide {
+      overflow: visible;
+      position: relative;
+    }
+
     .swiper-button-next,
     .swiper-button-prev {
-    color: #6d28d2;
-    top: 40%; // center vertically
-    width: 50px;
-    height: 50px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      color: #6d28d2;
+      top: 40%;
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+      font-size: 14px;
+      font-weight: bold;
+    }
   }
 
-  .swiper-button-next::after,
-  .swiper-button-prev::after {
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .swiper-pagination {
-    bottom: 0;
-  }
+  .course-card-hover {
+    position: relative;
   }
 
   .course-card {
-    width: 270px;
-    height: 320px;
-    // border: 1px solid #c0c0c0;
+    width: 250px;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      height: 100%;
+    }
 
     img {
       width: 100%;
       object-fit: cover;
     }
+
     .course-description {
-      padding: 0 15px;
+      padding: 0 12px;
+
       h3 {
         font-size: 16px;
         font-family: sans-serif;
         line-height: 20px;
-        margin-top:5px;
+        margin-top: 5px;
+        color: #2a2b3f;
       }
-      p{
-        margin-top: -8px;
-      }
-      h4 {
-        font-weight: 800;
-        font-family: sans-serif;
-        margin-top: -8px;
-        font-size: 13px;
-      }
-      .Premium {
-        display: inline-flex;
-        align-items: center;
-        border: 1px solid #6d28d2;
-        background-color: #6d28d2;
-        color: #fff;
-        padding: 5px 15px;
-        font-size: 12px;
-        border-radius: 5px;
-        font-weight: 600;
-        margin-top: -20px;
 
-        span {
-          display: flex;
+      p {
+        margin-top: -8px;
+        color: #505256;
+        font-size: 14px;
+      }
+
+      h4 {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1c1d1f;
+        font-family: "Segoe UI", sans-serif;
+        margin: 8px 0;
+
+        svg {
+          font-size: 1rem;
+          color: #1c1d1f;
+          margin-top: 1px;
+        }
+      }
+
+      .course-upgrade {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+
+        .Premium {
+          display: inline-flex;
           align-items: center;
-          margin-top: 0;
-          margin-right: 5px;
+          border: 1px solid #6d28d2;
+          background-color: #6d28d2;
+          color: #fff;
+          padding: 5px 15px;
+          font-size: 13px;
+          border-radius: 5px;
+          font-weight: 600;
+          font-family: sans-serif;
+
+          span {
+            display: flex;
+            align-items: center;
+            margin-right: 5px;
+          }
+        }
+
+        .badge {
+          display: inline-block;
+          background: linear-gradient(135deg, #d0ebff, #a5d8ff);
+          color: #003366;
+          font-size: 12px;
+          font-weight: 700;
+          padding: 4px 8px;
+          border-radius: 4px;
+          margin-left: 10px;
+          letter-spacing: 0.3px;
+          text-transform: uppercase;
+          font-family: "Segoe UI", sans-serif;
         }
       }
     }
+  }
+}
+
+.course-model-fixed {
+  width: 320px;
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  animation: fadeIn 0.2s ease-in-out;
+  z-index: 9999;
+  position: fixed;
+  font-family: sans-serif;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 13px;
+    margin: 4px 0;
+    color: #3c3c3c;
+  }
+  .course-highlights {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 12px;
+
+    .highlight-item {
+      display: flex;
+      align-items: start;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 20px;
+      color: #3c3c3c;
+
+      .tick-icon {
+        color: #2e7d32;
+        font-size: 1rem;
+        margin-top: 2px;
+      }
+    }
+  }
+
+  .course-upgrade {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+    .Premium {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #6d28d2;
+      background-color: #6d28d2;
+      color: #fff;
+      padding: 5px 15px;
+      font-size: 13px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-family: sans-serif;
+
+      span {
+        display: flex;
+        align-items: center;
+        margin-right: 5px;
+      }
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #d0ebff, #a5d8ff);
+      color: #003366;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-left: 10px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      font-family: "Segoe UI", sans-serif;
+    }
+  }
+  .Btn {
+    .Cart {
+      width: 200px;
+      text-align: center;
+      border: 1px solid #6d28d2;
+      background-color: #6d28d2;
+      color: #fff;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-family: sans-serif;
+    }
+    .like-course {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+      font-size: 20px;
+      font-family: sans-serif;
+      font-weight: 600;
+      margin-left: 20px;
+      border:1px solid #6d28d2;
+      color:#6d28d2;
+      background-color: #fff;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
