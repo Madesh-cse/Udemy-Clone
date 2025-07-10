@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 
 const app = express()
 const authrouter = require('./routes/auth');
+const userRouter = require('./routes/userRoute')
 const bodyParser = require('body-parser')
 
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 
 app.use('/auth',authrouter);
+app.use('/userAuth',userRouter)
 
 app.use((req, res) => {
   res.status(404).send('Route not found: ' + req.originalUrl);

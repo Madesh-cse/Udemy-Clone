@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const User = require('../model/user');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 exports.SignUp = async (req, res, next) => {
   const errors = validationResult(req);
@@ -13,7 +13,7 @@ exports.SignUp = async (req, res, next) => {
     });
   }
 
-  const { email, password, name } = req.body;
+  const { email, password, name, role } = req.body;
 
   try {
     const hashedPwd = await bcrypt.hash(password, 12);
@@ -21,7 +21,8 @@ exports.SignUp = async (req, res, next) => {
     const user = new User({
       email,
       password: hashedPwd,
-      name, 
+      name,
+      role 
     });
 
     const result = await user.save();
@@ -64,14 +65,15 @@ exports.Login = (req,res,next)=>{
 
         const token = jwt.sign({
             email:loadedUser.email,
-            userId : loadedUser._id.toString()
+            userId : loadedUser._id.toString(),
+            role:User.role
         },'supersecretesecrete',{expiresIn:'8h'})
 
-        res.status(200).json({token: token,userId: loadedUser._id.toString()})
+        res.status(200).json({token: token,userId: loadedUser._id.toString(), role:loadedUser.role})
     })
     .catch(err=>{
         if(!err.statusCode){
-            err.statusCode = 500;
+          err.statusCode = 500;
         }
         next(err)
     })

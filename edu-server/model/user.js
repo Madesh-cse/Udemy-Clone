@@ -14,10 +14,17 @@ const UserSchema = new  Schema({
         type:String,
         required: true
     },
+    role:{
+        type:String,
+        required:true,
+        enum : ["instructor","user"]
+    },
     status:{
         type:String,
         default:'I am new User'
     }
+},{
+    timestamps:true,
 })
 
 module.exports = mongoose.model('User',UserSchema)
