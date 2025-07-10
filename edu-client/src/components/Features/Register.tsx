@@ -7,11 +7,12 @@ import Footer from "../Footer/Footer";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
   const [userData, setuserData] = useState({
     name: "",
     email: "",
     password: "",
+    role: "",
   });
 
   console.log(userData);
@@ -21,19 +22,23 @@ function Register() {
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/signup",
-        userData,
+        userData
       );
       console.log(response.data);
       setuserData({
-        name:"",
-        email:"",
-        password:""
-      })
-      Navigate('/Login')
+        name: "",
+        email: "",
+        password: "",
+        role: "",
+      });
+      Navigate("/Login");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         console.error(err.response?.data); // Validation or server error
         alert(err.response?.data.message);
+      }
+      if(!userData.role){
+        alert('Select the Role')
       }
     }
   };
@@ -83,6 +88,21 @@ function Register() {
                     setuserData({ ...userData, password: e.target.value })
                   }
                 />
+              </div>
+              <div className="Role-based">
+                <select
+                  name="role"
+                  id="role"
+                  value={userData.role}
+                  onChange={(e) =>
+                    setuserData({ ...userData, role: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">Select the Role</option>
+                  <option value="user">user</option>
+                  <option value="instructor">instructor</option>
+                </select>
               </div>
               <div className="Recommendation">
                 <input type="checkbox" />

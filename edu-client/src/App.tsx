@@ -8,18 +8,22 @@ import Login from "./components/Features/Login";
 import ProtectedRoute from "./components/ProtectedRoute/ProductedRoute"; 
 import AuthenticatedHome from "./Pages/AuthenticatedHome";
 import AuthNavbar from "./components/isAuthenticatedHome/Navabar/Navbar";
+import InstructorDashBoard from "./Pages/InstructorDashBoard";
 
 function App() {
-  const [IsAuthenticated,setIsAuthenticated] = useState(!!localStorage.getItem("token"))
+  const [IsAuthenticated,setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+  const [role,setrole] = useState(localStorage.getItem('role')|| '')
 
   useEffect(()=>{
     const checkToken = ()=>{
       const token = localStorage.getItem("token")
+       const storedRole = localStorage.getItem("role");
       setIsAuthenticated(!!token)
+      setrole(storedRole|| "")
     }
     window.addEventListener("storage",checkToken)
     return ()=> window.removeEventListener("storage",checkToken)
-  },[])
+  },[]) 
 
   return (
     <Router>
@@ -31,11 +35,19 @@ function App() {
         <Route
           path="authenticated-home"
           element={
-            <ProtectedRoute isAuthenticated={IsAuthenticated}>
+            <ProtectedRoute isAuthenticated={IsAuthenticated && role === "user"}>
               <AuthenticatedHome />
             </ProtectedRoute>
           }
-        />
+        /> 
+        <Route
+          path="instructor-dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={IsAuthenticated && role === "instructor"}>
+              <InstructorDashBoard/>
+            </ProtectedRoute>
+          }
+        /> 
       </Routes>
     </Router>
   );

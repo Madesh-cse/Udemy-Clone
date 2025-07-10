@@ -17,7 +17,7 @@ function Login({setIsAuthenticated}: {setIsAuthenticated: (value:boolean)=>void}
 
     useEffect(()=>{
         const verifedToken = async()=>{
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem('token');
             if(!token){
                 return 
             }
@@ -26,7 +26,7 @@ function Login({setIsAuthenticated}: {setIsAuthenticated: (value:boolean)=>void}
                 await axios.get('http://localhost:8080/auth/verify',{
                     headers:{Authorization:`Bearer ${token}`}
                 })
-                navigate('/authentication-home')
+                navigate('/authenticated-home')
             }catch(err){
                 localStorage.removeItem('token')
             }
@@ -40,12 +40,21 @@ function Login({setIsAuthenticated}: {setIsAuthenticated: (value:boolean)=>void}
             const response = await  axios.post('http://localhost:8080/auth/login',userLogin)
             console.log(response.data)
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("role",response.data.role)
             setuserLogin({
                 email:'',
                 password:''
             })
             setIsAuthenticated(true)
-            navigate('/authenticated-home')
+
+            const role = response.data.role;
+
+            if(role === 'instructor'){
+                navigate('/instructor-dashboard')
+            }
+            else{
+                navigate('/authenticated-home')
+            }
         }
         catch(err){
             if(axios.isAxiosError(err)){
