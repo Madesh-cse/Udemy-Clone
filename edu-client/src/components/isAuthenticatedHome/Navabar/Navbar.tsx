@@ -27,7 +27,7 @@ function AuthNavbar({setIsAuthenticated}: {setIsAuthenticated:(value:boolean)=>v
                 <div className='nav-list-item'>
                     <ul>
                         <li><NavLink to='/plan-pricing'>Udemy Business</NavLink></li>
-                        <li><NavLink to='/Udemy Business'>Instructor</NavLink></li>
+                        <li><NavLink to='/teacher'>Instructor</NavLink></li>
                         <li><NavLink to='/Tech on Udemy'>My learning</NavLink></li>
                         <li><NavLink to=''><span><CiHeart/></span></NavLink></li>
                         <li className='Cart'><NavLink to='/cart'><span><IoCartOutline/></span></NavLink></li>
