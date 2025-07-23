@@ -62,7 +62,6 @@ exports.Login = (req,res,next)=>{
             error.statusCode = 401;
             throw error;
         }
-
         const token = jwt.sign({
             email:loadedUser.email,
             userId : loadedUser._id.toString(),

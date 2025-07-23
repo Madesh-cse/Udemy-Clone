@@ -1,13 +1,33 @@
 const express = require('express')
 const mongoose = require('mongoose')
-
 const app = express()
+const multer = require('multer')
+const path = require('path')
+
 const authrouter = require('./routes/auth');
-const userRouter = require('./routes/userRoute')
-const bodyParser = require('body-parser')
+const userRouter = require('./routes/userRoute');
+const courseRoute = require('./routes/coursecreation')
+const bodyParser = require('body-parser');
+require('./discountCron')
 
 
-app.use(bodyParser.json())
+const fileStorage = multer.diskStorage({
+  destination: (req,file,cb)=>{
+    cb(null,'images')
+  },
+  filename:(req,file,cb)=>{
+    cb(null,new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
+  }
+})
+
+const fileFilter = (req,file,cb)=>{
+  if(file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg'){
+    cb(null,true)
+  }
+  else{
+    cb(null,false)
+  }
+}
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,19 +40,22 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(bodyParser.json())
+app.use(multer({storage:fileStorage,fileFilter:fileFilter}).single('image'));
+app.use("/images",express.static(path.join(__dirname,'images')))
+
+
 
 app.use('/auth',authrouter);
-app.use('/userAuth',userRouter)
+app.use('/userAuth',userRouter);
+app.use('/courseCreation',courseRoute);
 
 app.use((req, res) => {
   res.status(404).send('Route not found: ' + req.originalUrl);
 });
 
-mongoose.connect('mongodb+srv://madesh10cse:INSr20go9yV263fu@e-learning-platform.mhnqgwz.mongodb.net/user?retryWrites=true&w=majority&appName=E-Learning-Platform',{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    writeConcern: { w: "majority" }
-})
+
+mongoose.connect('mongodb+srv://madesh10cse:INSr20go9yV263fu@e-learning-platform.mhnqgwz.mongodb.net/user?retryWrites=true&w=majority&appName=E-Learning-Platform')
 .then(result=>{
     app.listen(8080,()=>{
     console.log('✅ Server is running on http://localhost:8080')
