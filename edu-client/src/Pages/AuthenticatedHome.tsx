@@ -6,6 +6,7 @@ import CourseSlider from "../components/isAuthenticatedHome/AuthCourseSlider/Cou
 import { NodeJs } from "../data/nodeJs"
 import { WebDevelopers } from "../data/nodeJs"
 import TopPick from "../components/CourseCard/TopPick"
+import DynamicCourseCard from "../components/CourseCard/DynamicCourseCard"
 import Footer from "../components/Footer/Footer"
 function AuthenticatedHome() {
   return (
@@ -20,6 +21,7 @@ function AuthenticatedHome() {
       <CourseSlider title="The Complete Node.js Developer Course" courses={NodeJs} />
       <CourseSlider title="Popular for Web Developers" courses={WebDevelopers} />
       <TopPick/>
+      <DynamicCourseCard/>
     </main>
     <footer>
       <Footer/>
