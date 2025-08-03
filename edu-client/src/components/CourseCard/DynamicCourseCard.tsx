@@ -42,7 +42,7 @@ function DynamicCourseSlider() {
   return (
     <div className="card-slider-wrapper">
       <div className="card-slider-wrapper-title">
-        <h1>Explore Our Courses</h1>
+        <h1>Because you enrolled in " <Link to=''>NodeJS - The Complete Guide (MVC, REST APIs, GraphQL, Deno)</Link>"</h1>
       </div>
 
       <Swiper
@@ -61,7 +61,7 @@ function DynamicCourseSlider() {
       >
         {courses.map((course) => (
           <SwiperSlide key={course._id}>
-            <div className="course-card-hover">
+            <div className="course-card-hover"> 
               <div className="course-card">
                 <Link to={`/course-detail/${course._id}`}>
                   <img

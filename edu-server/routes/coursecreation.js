@@ -4,37 +4,44 @@ const { body } = require("express-validator");
 
 const courseController = require("../controllers/course");
 
-router.get("/course-card",courseController.getCourseCard)
+router.get("/course-card", courseController.getCourseCard);
 
-router.post('/course-home-card',[
-  body('title')
-    .trim()
-    .isLength({max: 78})
-    .withMessage("Charcter must be within the 78 Charcter"),
-  body('instructor')
-    .trim()
-    .isLength({max: 78})
-    .withMessage("Author name charcter must be within 78"),
-  body("price")
-    .trim()
-    .isLength({max: 5})
-    .withMessage("price value must be valid"),
-],courseController.HomeCourseCard)
+router.post(
+  "/course-home-card",
+  [
+    body("title")
+      .trim()
+      .isLength({ max: 78 })
+      .withMessage("Charcter must be within the 78 Charcter"),
+    body("author")
+      .trim()
+      .isLength({ max: 78 })
+      .withMessage("Author name character must be within 78"),
+    body("price")
+      .trim()
+      .isLength({ max: 5 })
+      .withMessage("Price value must be valid"),
+    body("instructor").notEmpty().withMessage("Instructor is required"),
+    body("courseDetails")
+      .notEmpty()
+      .withMessage("CourseDetails ID is required"),
+  ],
+  courseController.HomeCourseCard
+);
 
-
-router.get('/course-detail/:courseId',courseController.getCourse)
+router.get("/course-detail/:courseCardId", courseController.getCourse);
 
 router.post(
   "/course-creation-form",
   [
     body("title")
       .trim()
-      .isLength({ max: 28 })
-      .withMessage("Charcter must be within the 28 Charcter"),
+      .isLength({ max: 56 })
+      .withMessage("Charcter must be within the 56 Charcter"),
     body("courseSub")
       .trim()
-      .isLength({ max: 28 })
-      .withMessage("subCharacter must be within the 20 Character"),
+      .isLength({ max: 56 })
+      .withMessage("subCharacter must be within the 56 Character"),
     body("description")
       .trim()
       .isLength({ max: 200 })
@@ -54,15 +61,7 @@ router.post(
       .withMessage("Select the catogory")
       .isIn(["Web Development", " App Development ", "BlockChain", "AI"])
       .withMessage("Invalid language is selected"),
-     body("path")
-      .notEmpty()
-      .withMessage("Path is required"),
-    body("filename")
-      .notEmpty()
-      .withMessage("Filename is required"),
-     body("instructor")
-      .notEmpty()
-      .withMessage("Instructor ID is required"),
+    body("instructor").notEmpty().withMessage("Instructor ID is required"),
   ],
   courseController.CourseCreate
 );

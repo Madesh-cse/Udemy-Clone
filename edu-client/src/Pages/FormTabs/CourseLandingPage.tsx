@@ -78,6 +78,8 @@ function CourseLandingPage() {
         "http://localhost:8080/courseCreation/course-creation-form",
         course
       );
+      const createCourseId = res.data.courseId;
+      localStorage.setItem("courseDetails", createCourseId);
       alert("course created successfully");
       console.log(res.data);
       setcourseData({

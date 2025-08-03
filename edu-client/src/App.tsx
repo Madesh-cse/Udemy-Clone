@@ -69,7 +69,7 @@ useEffect(() => {
             </ProtectedRoute>
           }
         />
-        <Route path="/course-detail/:courseId" element={<CourseDetails/>}></Route>
+        <Route path="/course-detail/:courseCardId" element={<CourseDetails/>}></Route>
       </Routes>
     </Router>
   );

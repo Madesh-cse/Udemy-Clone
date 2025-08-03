@@ -15,8 +15,8 @@ const CourseCardSchema = new Schema(
       type: Number,
       required: true,
     },
-    currentPrice:{
-      type:Number,
+    currentPrice: {
+      type: Number,
       required: true,
     },
     path: {
@@ -32,7 +32,7 @@ const CourseCardSchema = new Schema(
       ref: "User",
       required: true,
     },
-     courseDetailsId: {
+    courseDetails: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
       required: true,
@@ -43,4 +43,4 @@ const CourseCardSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("CourseCard",CourseCardSchema)
+module.exports = mongoose.model("CourseCard", CourseCardSchema);

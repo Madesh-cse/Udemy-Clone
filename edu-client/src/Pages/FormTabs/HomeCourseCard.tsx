@@ -1,29 +1,35 @@
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 function HomeCourseCard() {
-  let maxChar = 78;
+  const maxChar = 78;
 
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
 
-  const [instructorId, setinstructorId] = useState<string | null>(null);
   const [couseCardData, setcourseCardData] = useState({
     title: "",
     author: "",
     price: "",
     instructor: "",
+    courseDetails: ""
   });
 
   useEffect(() => {
-    const id = localStorage.getItem("instructorId");
-    if (id) {
-      setinstructorId(id);
-      setcourseCardData((prev) => ({ ...prev, instructor: id || "" }));
+    const instructorId = localStorage.getItem("instructorId");
+    const courseDetailsId = localStorage.getItem("courseDetails");
+
+    if (instructorId && courseDetailsId) {
+      setcourseCardData(prev => ({
+        ...prev,
+        instructor: instructorId,
+        courseDetails: courseDetailsId
+      }));
+    } else {
+      alert("Instructor or Course Details ID not found. Please log in and submit course details first.");
     }
   }, []);
-
-//   console.log("Instructor Id", instructorId);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setcourseCardData({ ...couseCardData, [e.target.name]: e.target.value });
@@ -40,43 +46,33 @@ function HomeCourseCard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const storedInstructorId = localStorage.getItem("instructorId");
-
-    if (!storedInstructorId) {
-      alert("Instructor ID not found. Please log in again.");
-      return;
-    }
     const course = new FormData();
-    Object.entries(couseCardData).forEach(([Key, value]) => {
-      if (Key !== "instructor") {
-        course.append(Key, value);
-      }
-    });
 
-    course.append("instructor", storedInstructorId);
+    Object.entries(couseCardData).forEach(([key, value]) => {
+      course.append(key, value);
+    });
 
     if (image) {
       course.append("image", image);
     }
 
-    for (let pair of course.entries()) {
-      console.log(pair[0], pair[1]);
-    }
+    try {
+      const res = await axios.post("http://localhost:8080/courseCreation/course-home-card", course);
+      alert("Course card created successfully");
+      console.log(res.data);
 
-    try{
-        const res = await axios.post("http://localhost:8080/courseCreation/course-home-card",course);
-        alert("course created successfully");
-        console.log(res.data);
-        setcourseCardData({
+      setcourseCardData({
         title: "",
-        author:"",
-        price:"",
+        author: "",
+        price: "",
         instructor: "",
+        courseDetails: ""
       });
-    }
-    catch(err:any){
-        console.error(err.response?.data || err.message);
-        alert(err.response?.data?.message || "Course creation failed");
+      setImage(null);
+      setPreview("");
+    } catch (err: any) {
+      console.error(err.response?.data || err.message);
+      alert(err.response?.data?.message || "Course card creation failed");
     }
   };
 
@@ -88,78 +84,73 @@ function HomeCourseCard() {
         </div>
         <div className="Course-Landing-content">
           <p>
-            Your course landing page is crucial to your success on Udemy. If
-            it’s done right, it can also help you gain visibility in search
-            engines like Google. As you complete this section, think about
-            creating a compelling Course Landing Page that demonstrates why
-            someone would want to enroll in your course. Learn more about{" "}
-            <Link to="/">creating your course landing page</Link> and{" "}
-            <Link to="/"> course title standards</Link>.
+            Your course landing page is crucial to your success on Udemy. If it’s done right,
+            it can also help you gain visibility in search engines like Google.
           </p>
-          <div className="course-landing-form">
-            <form action="" onSubmit={handleSubmit}>
-              <div className="course-title">
-                <label htmlFor="">Course title</label>
-                <input type="text" placeholder="title" name="title" value={couseCardData.title} maxLength={maxChar} onChange={handleChange}/>
-                <p>{couseCardData.title.length}/{maxChar}</p>
-                <span>
-                  Your title should be a mix of attention-grabbing, informative,
-                  and optimized for search
-                </span>
-              </div>
-              <div className="course-title">
-                <label htmlFor="">Course Instrctor</label>
-                <input
-                  type="text"
-                  placeholder="Insert your course subtitle"
-                  name="author"
-                  value={couseCardData.author}
-                  maxLength={maxChar}
-                  onChange={handleChange}
-                />
-                <p> {couseCardData.author.length}/{maxChar}</p>
-                <span>
-                  Use 1 or 2 related keywords, and mention 3-4 of the most
-                  important areas that you've covered during your course.
-                </span>
-              </div>
-              <div className="primary-focus">
-                <label htmlFor="">
-                  What is primarily cost of course taught in the udemy?
-                </label>
-                <input type="text" placeholder="e.g. course price" name="price" value={couseCardData.price} onChange={handleChange} />
-              </div>
-              <div className="course-image">
-                <div className="course-container">
-                  <div className="display-container">
-                    <label htmlFor="">Course image</label>
-                    {preview ? (
-                      <img
-                        src={preview}
-                        alt="Preview"
-                        className="image-preview"
-                      />
-                    ) : (
-                      <img
-                        src="https://s.udemycdn.com/course/750x422/placeholder.jpg"
-                        alt=""
-                      />
-                    )}
-                  </div>
-                  <div className="course-upload">
-                    <p>
-                      Upload your course image here. It must meet our course
-                      image quality standards to be accepted. Important
-                      guidelines: 750x422 pixels; .jpg, .jpeg,. gif, or .png. no
-                      text on the image.
-                    </p>
-                    <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
-                  </div>
+          <form onSubmit={handleSubmit} className="course-landing-form">
+            <div className="course-title">
+              <label>Course title</label>
+              <input
+                type="text"
+                name="title"
+                placeholder="Course title"
+                maxLength={maxChar}
+                value={couseCardData.title}
+                onChange={handleChange}
+              />
+              <p>{couseCardData.title.length}/{maxChar}</p>
+            </div>
+
+            <div className="course-title">
+              <label>Course Instructor Name</label>
+              <input
+                type="text"
+                name="author"
+                placeholder="Author name"
+                maxLength={maxChar}
+                value={couseCardData.author}
+                onChange={handleChange}
+              />
+              <p>{couseCardData.author.length}/{maxChar}</p>
+            </div>
+
+            <div className="primary-focus">
+              <label>Price of the Course</label>
+              <input
+                type="text"
+                name="price"
+                placeholder="e.g. 1999"
+                value={couseCardData.price}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="course-image">
+              <label>Course Image</label>
+              <div className="course-container">
+                <div className="display-container">
+                  {preview ? (
+                    <img src={preview} alt="Preview" className="image-preview" />
+                  ) : (
+                    <img
+                      src="https://s.udemycdn.com/course/750x422/placeholder.jpg"
+                      alt="Placeholder"
+                    />
+                  )}
                 </div>
-                <button type="submit">Submit</button>
+                <div className="course-upload">
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </div>
               </div>
-            </form>
-          </div>
+            </div>
+
+            <button type="submit">Submit</button>
+          </form>
         </div>
       </div>
     </section>

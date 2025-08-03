@@ -49,6 +49,8 @@ exports.CourseCreate = async (req, res, next) => {
 
     const result = await course.save();
 
+    console.log("Saved Course ID:", result._id);
+
     res.status(201).json({
       message: " Instructor Course is created sucssefully",
       courseId: result._id,
@@ -63,65 +65,58 @@ exports.CourseCreate = async (req, res, next) => {
   }
 };
 
-exports.getCourse = async (req, res, next) => {
+exports.getCourse = async (req, res) => {
   try {
-    const { courseId } = req.params;
+    const { courseCardId } = req.params;
 
-    const course = await Course.findById(courseId).populate(
-      "instructor",
-      "name email"
-    );
-    if (!course) {
-      return res.status(404).json({ message: "Course not found" });
+    const courseCard = await coursecard
+      .findById(courseCardId)
+      .populate({ 
+        path: "courseDetails",
+        populate: { path: "instructor", select: "name email" },
+      });
+
+    if (!courseCard || !courseCard.courseDetails) {
+      return res.status(404).json({ message: "Course details not found" });
     }
-    res.status(200).json({ message: "Course data fetch successfully", course });
+
+    const course = courseCard.courseDetails;
+
+    res.status(200).json({
+      message: "Course data fetched successfully",
+      course: {
+        _id: course._id,
+        title: course.title,
+        courseSub: course.courseSub,
+        description: course.description,
+        language: course.language,
+        level: course.level,
+        catogory: course.catogory,
+        instructor: course.instructor,
+        imageUrl: `${req.protocol}://${req.get("host")}/${course.path}`,
+        filename: course.filename,
+      },
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch courses", error: err.message });
+    res.status(500).json({
+      message: "Failed to fetch course detail",
+      error: err.message,
+    });
   }
 };
 
-exports.getCourseCard = async (req, res, next) => {
+
+exports.getCourseCard = async (req, res) => {
   try {
-    const courseCards = await coursecard
-      .find()
-      .populate("instructor", "name email");
-
-    const updatedCards = courseCards.map((course) => {
-      const now = new Date();
-      const createdAt = new Date(course.createdAt);
-      const elapsedMs = now - createdAt;
-
-      const cycleDurationMs = 4 * 60 * 1000; // 4 minutes
-      const visibleStartMs = 2 * 60 * 1000; // starts showing at 2 min
-      const visibleEndMs = 4 * 60 * 1000; // ends at 4 min
-
-      const cycleMs = elapsedMs % cycleDurationMs;
-      const isDiscountVisible =
-        cycleMs >= visibleStartMs && cycleMs < visibleEndMs;
-
-      const originalPrice = course.price;
-      const discountedPrice = Math.round(originalPrice * 0.5);
-
-      return {
-        ...course.toObject(),
-        originalPrice,
-        discountedPrice,
-        currentPrice: isDiscountVisible ? discountedPrice : null,
-        discountPercent: isDiscountVisible ? 50 : null,
-        discountVisible: isDiscountVisible,
-      };
-    });
+    const courseCards = await coursecard.find()
+      .populate("instructor", "name email") 
 
     res.status(200).json({
-      message: "CourseCard data fetched successfully",
-      courseCard: updatedCards,
+      message: "Fetched course cards",
+      courseCard: courseCards,
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch courses", error: err.message });
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
@@ -142,7 +137,7 @@ exports.HomeCourseCard = async (req, res, next) => {
     });
   }
 
-  const { title, author, price, instructor, courseDetailsId } = req.body;
+  const { title, author, price, instructor,courseDetails } = req.body;
   const { path, filename } = req.file;
 
   try {
@@ -155,7 +150,7 @@ exports.HomeCourseCard = async (req, res, next) => {
       path,
       instructor,
       currentPrice: discountedPrice,
-      courseDetailsId,
+      courseDetails
     });
 
     const result = await courseCard.save();
