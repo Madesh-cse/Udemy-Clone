@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import CourseLandingPage from "../../Pages/FormTabs/CourseLandingPage";
 import PricingPage from "../../Pages/FormTabs/PricingPage";
 import HomeCourseCard from "../../Pages/FormTabs/HomeCourseCard";
+import IntendedLeaners from "../../Pages/FormTabs/IntendedLeaners";
 function CourseCreationDashBoard() {
   return (
     <section>
@@ -29,7 +30,7 @@ function CourseCreationDashBoard() {
                     <span>
                       <input type="radio" readOnly />
                     </span>{" "}
-                    Promotions
+                    Intended learners
                   </Tab>
                   <Tab>
                     <span>
@@ -92,7 +93,7 @@ function CourseCreationDashBoard() {
                 <PricingPage />
               </TabPanel>
               <TabPanel>
-                <PricingPage />
+                <IntendedLeaners/>
               </TabPanel>
                <TabPanel>
                 <HomeCourseCard />
