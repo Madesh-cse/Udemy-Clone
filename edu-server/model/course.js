@@ -38,6 +38,11 @@ const courseSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref : "User",
         required: true,
+    },
+    courseInstruction:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"CourseInstruction",
+        required: false,
     }
 
 },{

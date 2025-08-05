@@ -37,6 +37,7 @@ const CourseCardSchema = new Schema(
       ref: "Course",
       required: true,
     },
+    
   },
   {
     timestamps: true,

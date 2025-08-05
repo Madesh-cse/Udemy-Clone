@@ -4,6 +4,8 @@ const { body } = require("express-validator");
 
 const courseController = require("../controllers/course");
 
+// Course card creation 
+
 router.get("/course-card", courseController.getCourseCard);
 
 router.post(
@@ -28,6 +30,8 @@ router.post(
   ],
   courseController.HomeCourseCard
 );
+
+// course Detail creation
 
 router.get("/course-detail/:courseCardId", courseController.getCourse);
 
@@ -65,5 +69,26 @@ router.post(
   ],
   courseController.CourseCreate
 );
+
+// Course Instruction Detail
+
+router.post("/courseInstruction",[
+  body('role')
+  .trim()
+  .isLength({max: 160})
+  .withMessage("The Role Message has to be within 160 Character"),
+  body("Budget")
+  .trim()
+  .isLength({max:160})
+  .withMessage("The Budget  Message has to be within 160 Character"),
+  body("ProjectRisk")
+  .trim()
+  .isLength({max:160})
+  .withMessage("The ProjectRisk  Message has to be within 160 Character"),
+  body("CaseStudy")
+  .trim()
+  .isLength({max:160})
+  .withMessage("The CaseStudy  Message has to be within 160 Character")
+],courseController.CourseInstruction)
 
 module.exports = router;
