@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const Course = require("../model/course");
 const coursecard = require("../model/coursecard");
+const CourseInstruction = require("../model/courseInstruction")
 
 exports.CourseCreate = async (req, res, next) => {
   const title = req.body.title;
@@ -73,7 +74,10 @@ exports.getCourse = async (req, res) => {
       .findById(courseCardId)
       .populate({ 
         path: "courseDetails",
-        populate: { path: "instructor", select: "name email" },
+        populate: [
+          { path: "instructor", select: "name email" },
+          {path: "courseInstruction"}
+        ] 
       });
 
     if (!courseCard || !courseCard.courseDetails) {
@@ -95,6 +99,7 @@ exports.getCourse = async (req, res) => {
         instructor: course.instructor,
         imageUrl: `${req.protocol}://${req.get("host")}/${course.path}`,
         filename: course.filename,
+        courseInstruction : course.courseInstruction,
       },
     });
   } catch (err) {
@@ -168,3 +173,44 @@ exports.HomeCourseCard = async (req, res, next) => {
     });
   }
 };
+
+  exports.CourseInstruction = async (req,res,next)=>{
+  
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()){
+      return res.status(422).json({
+        message:'Validation Failed',
+        errors: errors.array()
+      })
+    }
+
+    const role = req.body.role;
+    const Budget = req.body.Budget;
+    const ProjectRisk = req.body.ProjectRisk;
+    const CaseStudy = req.body.CaseStudy;
+    const Requirement = req.body.Requirement;
+    const AboutCourse = req.body.AboutCourse;
+    const courseDetailId = req.body.courseDetailId;
+
+    try{
+      const courseInstruction = new CourseInstruction({
+        role,
+        Budget,
+        ProjectRisk,
+        CaseStudy,
+        Requirement,
+        AboutCourse
+      })
+
+      const saveCourseInstruction = await courseInstruction.save();
+
+    const updatedCourse =  await Course.findByIdAndUpdate(courseDetailId,{
+        courseInstruction: saveCourseInstruction._id
+      })
+      res.status(201).json({ message: "Instruction added and linked",instruction: saveCourseInstruction, course: updatedCourse });
+    }
+    catch(err){
+      res.status(500).json({ message: "Error linking instruction", error: err.message });
+    }
+  }
