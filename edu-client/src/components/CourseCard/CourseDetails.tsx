@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import "../../styles/Components/_courseCreation.scss";
-import { FaGreaterThan } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { FaGreaterThan, FaIndianRupeeSign } from "react-icons/fa6";
 import { MdOutlineVerified } from "react-icons/md";
 import { IoMdContacts } from "react-icons/io";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { FaRegHeart } from "react-icons/fa";
-import { FaIndianRupeeSign } from "react-icons/fa6";
+import { useCart } from "../context/CartContext";
 
 interface CourseInstruction {
   role: string;
@@ -19,9 +18,10 @@ interface CourseInstruction {
   AboutCourse: string;
 }
 
-interface CourseDetails {
+interface CourseDetailsType {
   _id: string;
   title: string;
+  author: string;
   courseSub: string;
   description: string;
   imageUrl: string;
@@ -30,16 +30,23 @@ interface CourseDetails {
   catogory: string;
   path: string;
   filename: string;
+  price: string;
   courseInstruction: CourseInstruction;
 }
 
+// type CourseDetailsProps = {
+//   userId: string;
+// };
+
 function CourseDetails() {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
   const { courseCardId } = useParams();
-  const [course, setCourse] = useState<CourseDetails | null>(null);
+  const userId = localStorage.getItem("userId");
+
+  const [course, setCourse] = useState<CourseDetailsType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-
-  console.log("Course ID:", courseCardId);
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
@@ -48,16 +55,27 @@ function CourseDetails() {
           `http://localhost:8080/courseCreation/course-detail/${courseCardId}`
         );
         setCourse(res.data.course);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching course details:", err);
         setError("Failed to load course details.");
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchCourseDetails();
+    if (courseCardId) fetchCourseDetails();
   }, [courseCardId]);
+
+const handleAddToCart = async() => {
+  if (course && userId) {
+    try {
+      await addToCart(userId, course._id);
+      navigate("/cart");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  }
+};
 
   if (loading) return <p>Loading course details...</p>;
   if (error) return <p>{error}</p>;
@@ -67,11 +85,12 @@ function CourseDetails() {
     <div className="course-details">
       <div className="course-detail-background">
         <div className="course-detail-content">
+          {/* Left Side */}
           <div className="course-container-1">
             <h3>
               <span>Development</span> <FaGreaterThan />
               <span> Web Development</span> <FaGreaterThan />
-              <span> Angular</span>
+              <span> {course.catogory}</span>
             </h3>
             <div className="course-detail-title">
               <h1>{course.title}</h1>
@@ -79,7 +98,7 @@ function CourseDetails() {
               <p>{course.description}</p>
               <p className="badge">Bestseller</p>
               <p className="author">
-                Created by <Link to="/">Maximilian Schwarzmüller</Link>
+                Created by <Link to="/">{course.author}</Link>
               </p>
             </div>
             <div className="course-position-card">
@@ -101,17 +120,19 @@ function CourseDetails() {
                   <span>★</span>
                   <span>★</span>
                   <span>★</span>
-                  <span style={{ color: "#ccc" }}>★</span>{" "}
+                  <span style={{ color: "#ccc" }}>★</span>
                 </div>
                 <div className="rating-count">(3,456 ratings)</div>
               </div>
               <div className="fourth-box">
                 <IoMdContacts />
                 <p>831,631</p>
-                <p>leaners</p>
+                <p>learners</p>
               </div>
             </div>
           </div>
+
+          {/* Right Side */}
           <div className="course-container-2">
             <div className="course-box">
               <img src={course.imageUrl} alt={course.title} />
@@ -121,6 +142,8 @@ function CourseDetails() {
                     <Tab>Personal</Tab>
                     <Tab>Teams</Tab>
                   </TabList>
+
+                  {/* Personal Tab */}
                   <TabPanel>
                     <div className="tab-course-content">
                       <div className="content-1">
@@ -129,11 +152,11 @@ function CourseDetails() {
                           This Premium course is included in plans
                         </p>
                         <div className="title">
-                          <h3>Subscribe to Udemy’s top courses </h3>
+                          <h3>Subscribe to Udemy’s top courses</h3>
                           <p>
                             Get this course, plus 26,000+ of our top-rated
                             courses, with Personal Plan.{" "}
-                            <Link to="/">Learn more</Link>{" "}
+                            <Link to="/">Learn more</Link>
                           </p>
                         </div>
                         <div className="Subscription">
@@ -148,10 +171,16 @@ function CourseDetails() {
                           <div className="price-container">
                             <h1 className="course-price">
                               <FaIndianRupeeSign />
-                              3229
+                              {course.price}
                             </h1>
                             <div className="Btn">
-                              <button className="Cart">Add to cart</button>
+                              <button
+                              type="button"
+                                className="Cart"
+                                onClick={handleAddToCart}
+                              >
+                                Add to cart
+                              </button>
                               <button className="like-course">
                                 <FaRegHeart />
                               </button>
@@ -166,6 +195,8 @@ function CourseDetails() {
                       </div>
                     </div>
                   </TabPanel>
+
+                  {/* Teams Tab */}
                   <TabPanel>
                     <div className="tab-content-2">
                       <p className="premium-note">
@@ -182,12 +213,13 @@ function CourseDetails() {
                         <p>
                           Get this course, plus 26,000+ of our top-rated
                           courses, with Personal Plan.{" "}
-                          <Link to="/">Learn more</Link>{" "}
+                          <Link to="/">Learn more</Link>
                         </p>
                       </div>
                       <div className="Btn">
                         <Link to="" className="Purchases">
                           Try Udemy Business
+                          {/* <button onClick={Click}>Submit</button> */}
                         </Link>
                       </div>
                       <div className="team-list">
@@ -206,8 +238,10 @@ function CourseDetails() {
           </div>
         </div>
       </div>
+
+      {/* Course Instructions */}
       <div className="course-instruction-container">
-         <h2>What You Will Learn</h2>
+        <h2>What You Will Learn</h2>
         {course.courseInstruction && (
           <div className="course-instruction-box">
             <ul>

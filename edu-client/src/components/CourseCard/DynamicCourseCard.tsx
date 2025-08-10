@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "../../styles/Components/Instructor/_dynamic-course-slider.scss";
 import { MdOutlineVerified } from "react-icons/md";
+import DynamicModel from "../Model/DymaicModel";
 
 interface Course {
   _id: string;
@@ -21,6 +22,12 @@ interface Course {
 
 function DynamicCourseSlider() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hoverPosition, setHoverPosition] = useState<{ top: number; left: number }>({
+    top: 0,
+    left: 0,
+  });
+  
 
   console.log(courses)
 
@@ -61,7 +68,13 @@ function DynamicCourseSlider() {
       >
         {courses.map((course) => (
           <SwiperSlide key={course._id}>
-            <div className="course-card-hover"> 
+            <div className="course-card-hover"  onMouseEnter={(e)=>{
+              const rect = e.currentTarget.getBoundingClientRect()
+              setHoveredId(course._id);
+              setHoverPosition({ top: rect.top + window.scrollY, left: rect.right + 10 })
+            }}
+            onMouseLeave={() => setHoveredId(null)}
+            > 
               <div className="course-card">
                 <Link to={`/course-detail/${course._id}`}>
                   <img
@@ -93,6 +106,19 @@ function DynamicCourseSlider() {
           </SwiperSlide>
         ))}
       </Swiper>
+       {hoveredId && (
+        <div
+          className="course-model-fixed"
+          style={{
+            position: "absolute",
+            top: hoverPosition.top,
+            left: hoverPosition.left,
+            zIndex: 1000,
+          }}
+        >
+          <DynamicModel courseCardId={hoveredId} />
+        </div>
+      )}
     </div>
   );
 }
