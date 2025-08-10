@@ -12,7 +12,7 @@ interface Course {
   rating: number;
   totalrate: number;
   bestSeller?: boolean;
-  highlights?: string[]; // <-- corrected spelling
+  highlights?: string[];
 }
 
 interface ModelProps {
