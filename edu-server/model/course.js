@@ -6,6 +6,10 @@ const courseSchema = new Schema({
         type: String,
         required: true,
     },
+    author:{
+        type:String,
+        required: true,
+    },
     courseSub:{
         type:String,
         required: true,
@@ -13,6 +17,10 @@ const courseSchema = new Schema({
     description:{
         type:String,
         required: true,
+    },
+    price:{
+        type:String,
+        required:true
     },
     language:{
         type:String,

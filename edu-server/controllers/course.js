@@ -1,12 +1,16 @@
 const { validationResult } = require("express-validator");
 const Course = require("../model/course");
 const coursecard = require("../model/coursecard");
-const CourseInstruction = require("../model/courseInstruction")
+const CourseInstruction = require("../model/courseInstruction");
+const Cart = require("../model/courseCart");
+const mongoose = require("mongoose")
 
 exports.CourseCreate = async (req, res, next) => {
   const title = req.body.title;
   const courseSub = req.body.courseSub;
+  const author = req.body.author;
   const description = req.body.description;
+  const price = req.body.price;
   const language = req.body.language;
   const level = req.body.level;
   const catogory = req.body.catogory;
@@ -38,8 +42,10 @@ exports.CourseCreate = async (req, res, next) => {
   try {
     const course = new Course({
       title,
+      author,
       courseSub,
       description,
+      price,
       language,
       level,
       catogory,
@@ -70,15 +76,13 @@ exports.getCourse = async (req, res) => {
   try {
     const { courseCardId } = req.params;
 
-    const courseCard = await coursecard
-      .findById(courseCardId)
-      .populate({ 
-        path: "courseDetails",
-        populate: [
-          { path: "instructor", select: "name email" },
-          {path: "courseInstruction"}
-        ] 
-      });
+    const courseCard = await coursecard.findById(courseCardId).populate({
+      path: "courseDetails",
+      populate: [
+        { path: "instructor", select: "name email" },
+        { path: "courseInstruction" },
+      ],
+    });
 
     if (!courseCard || !courseCard.courseDetails) {
       return res.status(404).json({ message: "Course details not found" });
@@ -93,13 +97,14 @@ exports.getCourse = async (req, res) => {
         title: course.title,
         courseSub: course.courseSub,
         description: course.description,
+        price: course.price,
         language: course.language,
         level: course.level,
         catogory: course.catogory,
         instructor: course.instructor,
         imageUrl: `${req.protocol}://${req.get("host")}/${course.path}`,
         filename: course.filename,
-        courseInstruction : course.courseInstruction,
+        courseInstruction: course.courseInstruction,
       },
     });
   } catch (err) {
@@ -110,11 +115,11 @@ exports.getCourse = async (req, res) => {
   }
 };
 
-
 exports.getCourseCard = async (req, res) => {
   try {
-    const courseCards = await coursecard.find()
-      .populate("instructor", "name email") 
+    const courseCards = await coursecard
+      .find()
+      .populate("instructor", "name email");
 
     res.status(200).json({
       message: "Fetched course cards",
@@ -142,7 +147,7 @@ exports.HomeCourseCard = async (req, res, next) => {
     });
   }
 
-  const { title, author, price, instructor,courseDetails } = req.body;
+  const { title, author, price, instructor, courseDetails } = req.body;
   const { path, filename } = req.file;
 
   try {
@@ -155,7 +160,7 @@ exports.HomeCourseCard = async (req, res, next) => {
       path,
       instructor,
       currentPrice: discountedPrice,
-      courseDetails
+      courseDetails,
     });
 
     const result = await courseCard.save();
@@ -174,43 +179,121 @@ exports.HomeCourseCard = async (req, res, next) => {
   }
 };
 
-  exports.CourseInstruction = async (req,res,next)=>{
-  
-    const errors = validationResult(req);
+exports.CourseInstruction = async (req, res, next) => {
+  const errors = validationResult(req);
 
-    if(!errors.isEmpty()){
-      return res.status(422).json({
-        message:'Validation Failed',
-        errors: errors.array()
-      })
-    }
-
-    const role = req.body.role;
-    const Budget = req.body.Budget;
-    const ProjectRisk = req.body.ProjectRisk;
-    const CaseStudy = req.body.CaseStudy;
-    const Requirement = req.body.Requirement;
-    const AboutCourse = req.body.AboutCourse;
-    const courseDetailId = req.body.courseDetailId;
-
-    try{
-      const courseInstruction = new CourseInstruction({
-        role,
-        Budget,
-        ProjectRisk,
-        CaseStudy,
-        Requirement,
-        AboutCourse
-      })
-
-      const saveCourseInstruction = await courseInstruction.save();
-
-    const updatedCourse =  await Course.findByIdAndUpdate(courseDetailId,{
-        courseInstruction: saveCourseInstruction._id
-      })
-      res.status(201).json({ message: "Instruction added and linked",instruction: saveCourseInstruction, course: updatedCourse });
-    }
-    catch(err){
-      res.status(500).json({ message: "Error linking instruction", error: err.message });
-    }
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: "Validation Failed",
+      errors: errors.array(),
+    });
   }
+
+  const role = req.body.role;
+  const Budget = req.body.Budget;
+  const ProjectRisk = req.body.ProjectRisk;
+  const CaseStudy = req.body.CaseStudy;
+  const Requirement = req.body.Requirement;
+  const AboutCourse = req.body.AboutCourse;
+  const courseDetailId = req.body.courseDetailId;
+
+  try {
+    const courseInstruction = new CourseInstruction({
+      role,
+      Budget,
+      ProjectRisk,
+      CaseStudy,
+      Requirement,
+      AboutCourse,
+    });
+
+    const saveCourseInstruction = await courseInstruction.save();
+
+    const updatedCourse = await Course.findByIdAndUpdate(courseDetailId, {
+      courseInstruction: saveCourseInstruction._id,
+    });
+    res.status(201).json({
+      message: "Instruction added and linked",
+      instruction: saveCourseInstruction,
+      course: updatedCourse,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error linking instruction", error: err.message });
+  }
+};
+
+// GET CART
+exports.getCart = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    // console.log("Received userId:", userId);
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      console.log("Invalid userId format");
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    const queryUserId = new mongoose.Types.ObjectId(userId);
+    // console.log("QueryUserId:", queryUserId);
+
+    const cart = await Cart.findOne({ user: queryUserId }).populate({
+      path: "courses",
+      select: "title author price level catogory path",
+    });
+
+    // console.log("Cart found:", cart);
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found", courses: [] });
+    }
+
+    res.status(200).json({
+      message: "Cart fetched successfully",
+      courses: cart.courses,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch cart" });
+  }
+};
+
+// ADD TO CART
+exports.addToCart = async (req, res) => {
+  const { userId, courseId } = req.body;
+
+  try {
+    let cart = await Cart.findOne({ user: userId });
+
+    // console.log("Existing cart:", cart);
+    // console.log("Incoming courseId:", courseId);
+    // console.log("Already has course?", cart.courses.includes(courseId));
+
+    if (!cart) {
+      cart = new Cart({
+        user: userId,
+        courses: [courseId],
+      });
+    } else {
+      if (cart.courses.includes(courseId)) {
+        return res.status(200).json({ message: "Course already in cart" });
+      }
+      cart.courses.push(courseId);
+    }
+
+    await cart.save();
+
+    const updatedCart = await Cart.findOne({ user: userId }).populate({
+      path: "courses",
+      select: "title level catogory path",
+    });
+
+    return res.status(200).json({
+      message: "Course added to cart",
+      courses: updatedCart.courses,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Error adding to cart" });
+  }
+};

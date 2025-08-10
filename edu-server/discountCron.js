@@ -13,7 +13,7 @@ cron.schedule("*/2 * * * *",async()=>{
             if(diiferentTime >= 48 && course.currentPrice !== course.price){
                 course.currentPrice = Math.floor(course.currentPrice/2);
                 await course.save();
-                console.log(`Discount applied to: ${course.title}`);
+                // console.log(`Discount applied to: ${course.title}`);
             }
         }
     }

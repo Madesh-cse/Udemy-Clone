@@ -4,7 +4,7 @@ const { body } = require("express-validator");
 
 const courseController = require("../controllers/course");
 
-// Course card creation 
+// Course card creation
 
 router.get("/course-card", courseController.getCourseCard);
 
@@ -42,6 +42,10 @@ router.post(
       .trim()
       .isLength({ max: 56 })
       .withMessage("Charcter must be within the 56 Charcter"),
+    body("author")
+      .trim()
+      .isLength({ max: 78 })
+      .withMessage("Author name character must be within 78"),
     body("courseSub")
       .trim()
       .isLength({ max: 56 })
@@ -50,6 +54,10 @@ router.post(
       .trim()
       .isLength({ max: 200 })
       .withMessage("Description must be within the 200 Character"),
+    body("price")
+      .trim()
+      .isLength({ max: 5 })
+      .withMessage("Price value must be valid"),
     body("language")
       .notEmpty()
       .withMessage("Select the Language")
@@ -72,23 +80,35 @@ router.post(
 
 // Course Instruction Detail
 
-router.post("/courseInstruction",[
-  body('role')
-  .trim()
-  .isLength({max: 160})
-  .withMessage("The Role Message has to be within 160 Character"),
-  body("Budget")
-  .trim()
-  .isLength({max:160})
-  .withMessage("The Budget  Message has to be within 160 Character"),
-  body("ProjectRisk")
-  .trim()
-  .isLength({max:160})
-  .withMessage("The ProjectRisk  Message has to be within 160 Character"),
-  body("CaseStudy")
-  .trim()
-  .isLength({max:160})
-  .withMessage("The CaseStudy  Message has to be within 160 Character")
-],courseController.CourseInstruction)
+router.post(
+  "/courseInstruction",
+  [
+    body("role")
+      .trim()
+      .isLength({ max: 160 })
+      .withMessage("The Role Message has to be within 160 Character"),
+    body("Budget")
+      .trim()
+      .isLength({ max: 160 })
+      .withMessage("The Budget  Message has to be within 160 Character"),
+    body("ProjectRisk")
+      .trim()
+      .isLength({ max: 160 })
+      .withMessage("The ProjectRisk  Message has to be within 160 Character"),
+    body("CaseStudy")
+      .trim()
+      .isLength({ max: 160 })
+      .withMessage("The CaseStudy  Message has to be within 160 Character"),
+  ],
+  courseController.CourseInstruction
+);
+
+// GET ADD TO CART
+
+router.get("/get-cart/:userId", courseController.getCart);
+
+// POST ADD TO CART
+
+router.post("/add-cart", courseController.addToCart);
 
 module.exports = router;
