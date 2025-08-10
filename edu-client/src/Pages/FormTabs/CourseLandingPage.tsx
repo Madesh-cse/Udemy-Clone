@@ -12,8 +12,10 @@ function CourseLandingPage() {
   const [instructorId, setinstructorId] = useState<string | null>(null);
   const [courseData, setcourseData] = useState({
     title: "",
+    author: "",
     courseSub: "",
     description: "",
+    price:"",
     language: "",
     level: "",
     catogory: "",
@@ -84,8 +86,10 @@ function CourseLandingPage() {
       console.log(res.data);
       setcourseData({
         title: "",
+        author:"",
         courseSub: "",
         description: "",
+        price:"",
         language: "",
         level: "",
         catogory: "",
@@ -127,6 +131,24 @@ function CourseLandingPage() {
                 />
                 <p>
                   {courseData.title.length}/{maxChar}
+                </p>
+                <span>
+                  Your title should be a mix of attention-grabbing, informative,
+                  and optimized for search
+                </span>
+              </div>
+              <div className="course-title">
+                <label htmlFor="">Course Price</label>
+                <input
+                  type="text"
+                  placeholder="Author"
+                  name="author"
+                  value={courseData.author}
+                  maxLength={maxChar}
+                  onChange={handleChange}
+                />
+                <p>
+                  {courseData.author.length}/{maxChar}
                 </p>
                 <span>
                   Your title should be a mix of attention-grabbing, informative,
@@ -209,7 +231,7 @@ function CourseLandingPage() {
                 <label htmlFor="">
                   What is primarily taught in your course?
                 </label>
-                <input type="text" placeholder="e.g. Landscape Photography" />
+                <input type="text" name="price" value={courseData.price} onChange={handleChange} placeholder="e.g. 3000"  />
               </div>
               <div className="course-image">
                 <div className="course-container">

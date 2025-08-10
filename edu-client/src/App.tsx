@@ -11,6 +11,7 @@ import AuthNavbar from "./components/isAuthenticatedHome/Navabar/Navbar";
 import InstructorDashBoard from "./Pages/InstructorDashBoard";
 import CourseCreationForm from "./Pages/CourseCreationForm";
 import CourseDetails from "./components/CourseCard/CourseDetails";
+import CartPage from "./components/Features/CartPage";
 
 function App() {
   const [IsAuthenticated, setIsAuthenticated] = useState(
@@ -70,6 +71,7 @@ useEffect(() => {
           }
         />
         <Route path="/course-detail/:courseCardId" element={<CourseDetails/>}></Route>
+        <Route path="/cart" element={<CartPage/>}></Route>
       </Routes>
     </Router>
   );
