@@ -54,7 +54,7 @@ This project replicates core functionalities of Udemy, including **role-based fe
 
 ## 📸 Screenshots (Optional)
 
-_Add some UI screenshots here (Home Page, Course Page, Checkout, Instructor Dashboard, etc.)_
+https://github.com/Madesh-cse/Udemy-Clone/issues/1
 
 ---
 
