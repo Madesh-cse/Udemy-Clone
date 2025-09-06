@@ -58,6 +58,31 @@ This project replicates core functionalities of Udemy, including **role-based fe
 
 ---
 
+
+## 🎮 Usage
+1. Register as a student or instructor.
+2. If instructor → create a new course and upload videos.
+3. If student → browse courses, add to cart, purchase using Stripe.
+4. Receive an email confirmation via SendGrid.
+5. Start learning! 🎓
+
+
+## 📊 Future Improvements
+- Instructor analytics dashboard
+- Live streaming classes
+- Recommendation system for students
+- Wishlist & favorites feature
+
+## 🙋 FAQ
+
+**Q: Can I use this project for production?**  
+A: This is a learning project, not intended for production use.
+
+**Q: Can I contribute new features?**  
+A: Yes! Contributions are welcome — please check the [Contributing](#-contributing) section.
+
+
+
 ## ⚙️ Installation & Setup
 
 Clone the repository:
