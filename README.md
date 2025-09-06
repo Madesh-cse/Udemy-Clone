@@ -52,7 +52,7 @@ This project replicates core functionalities of Udemy, including **role-based fe
 
 ---
 
-## 📸 Screenshots (Optional)
+## 📸 Screenshots
 
  ScreenShot of my Udemy Clone plese visit it :  https://github.com/Madesh-cse/Udemy-Clone/issues/1
 
